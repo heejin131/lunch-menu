@@ -21,7 +21,7 @@ Have a good lunch!
 ''')
 
 menu_name = st.text_input("매뉴 이름", placeholder="예: 김치볶음밥")
-member_name = st.text_input("먹은 사람", placeholder="예: 전희진", value = "HEEJIN")
+member_name = st.text_input("먹은 사람", placeholder="예: 전희진", value = "heejin")
 dt = st.date_input("날짜")
 
 isPress = st.button("메뉴저장")
@@ -34,6 +34,8 @@ if isPress:
         "INSERT INTO lunch_menu(menu_name, member_name, dt) VALUES (%s, %s, %s);",
           (menu_name, member_name, dt)
 )
+        conn.commit()
+        cursor.close()
         st.success(f"버튼{isPress}:{menu_name}, {member_name}, {dt}")
     else:
         st.warning(f"모든 값을 입력해주세요!")
