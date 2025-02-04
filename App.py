@@ -84,4 +84,18 @@ fig, ax = plt.subplots()
 gdf.plot(x='ename', y='menu_name', kind='bar', ax=ax)
 st.pyplot(fig)
 
+# TODO
+# CSV 로드해서 한번에 다 디비에 INSERT 하는거
+st.subheader("벌크 인서트")
+isPress = st.button("한방에 인서트")
+    if menu_name and member_name and dt:
+        df = pd.read_csv('note/lunch_menu.csv')
 
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+        conn.commit()
+        cursor.close()
+        st.success(f"DB에 저장되었습니다.")
+    else:
+        st.warning(f"DB에 저장 실패!")
