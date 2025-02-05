@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import psycopg
 import os
 from  dotenv import load_dotenv
-
 load_dotenv()
 DB_CONFIG = {
     "user": os.getenv("DB_USERNAME"),
@@ -16,6 +15,17 @@ DB_CONFIG = {
 
 def get_connection():
     return psycopg.connect(**DB_CONFIG)
+
+def insert_menu(menu_name, member_name, dt):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO lunch_menu(menu_name, member_name, dt) VALUES (%s, %s, %s);",
+          (menu_name, member_name, dt)
+)
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 st.title("오늘 점심 뭐먹지?")
 st.write('''
@@ -35,15 +45,8 @@ isPress = st.button("메뉴저장")
 
 if isPress:
     if menu_name and member_name and dt:
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-        "INSERT INTO lunch_menu(menu_name, member_name, dt) VALUES (%s, %s, %s);",
-          (menu_name, member_name, dt)
-)
-        conn.commit()
-        conn.close()
-        st.success(f"버튼{isPress}:{menu_name}, {member_name}, {dt}")
+        insert_menu(menu_name, member_name, dt)
+        st.success(f"입력성공")
     else:
         st.warning(f"모든 값을 입력해주세요!")
 
