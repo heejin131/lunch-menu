@@ -64,6 +64,7 @@ cursor.execute(query)
 rows = cursor.fetchall()
 #conn.commit()
 cursor.close()
+conn.close()
 
 #selected_df = pd.DateFrame([[1,2,3]],[4,5,6], columns=[['a','b','c'])
 selected_df = pd.DataFrame(rows, columns=['menu_name', 'ename', 'dt'])
