@@ -25,6 +25,9 @@ CREATE TABLE public.lunch_menu (
 	dt date NOT NULL,
 	CONSTRAINT lunch_menu_pk PRIMARY KEY (id)
 );
+
+alter table lunch_menu
+add constraint unique_member_dt unique (member_name, dt);
 ```
 
 ## DEV
@@ -47,5 +50,7 @@ $ cp env.dummy .env
 $ streamlit run App.py
 ```
 
-
-
+- REF
+```bash
+https://streamlit.io/
+```

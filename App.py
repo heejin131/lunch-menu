@@ -18,17 +18,24 @@ def get_connection():
     return psycopg.connect(**DB_CONFIG)
 
 def insert_menu(menu_name, member_name, dt):
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO lunch_menu(menu_name, member_name, dt) VALUES (%s, %s, %s);",
-          (menu_name, member_name, dt)
-)
-    conn.commit()
-    cursor.close()
-    conn.close()
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO lunch_menu(menu_name, member_name, dt) VALUES (%s, %s, %s);",
+            (menu_name, member_name, dt)
+            )
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return True
+    except Exception as e:
+        print(f"Exception:{e}")
+        return False
+st.markdown(f"# 오늘 점심 뭐먹지?{db_name}")
+st.sidebar.markdown("## Main page 🎧")
 
-st.title(f"오늘 점심 뭐먹지?{db_name}")
+#st.title(f"오늘 점심 뭐먹지?{db_name}")
 st.write('''
 Have a good lunch!
 ''')
@@ -39,15 +46,21 @@ Have a good lunch!
 st.subheader("입력")
 
 menu_name = st.text_input("매뉴 이름", placeholder="예: 김치볶음밥")
-member_name = st.text_input("먹은 사람", placeholder="예: 전희진", value = "heejin")
+#member_name = st.text_input("먹은 사람", placeholder="예: 전희진", value = "heejin")
+member_name = st.selectbox(
+    "먹은 사람?",
+    ("heejin", "TOM", "cho", "hyun", "JERRY", "SEO", "jiwon", "jacob", "lucas","nuni"),
+)
 dt = st.date_input("날짜")
 
 isPress = st.button("메뉴저장")
 
 if isPress:
     if menu_name and member_name and dt:
-        insert_menu(menu_name, member_name, dt)
-        st.success(f"입력성공")
+        if insert_menu(menu_name, member_name, dt):
+            st.success(f"입력성공")
+        else:
+            st.error(f"입력실패")
     else:
         st.warning(f"모든 값을 입력해주세요!")
 
@@ -71,7 +84,9 @@ conn.close()
 selected_df = pd.DataFrame(rows, columns=['menu_name', 'ename', 'dt'])
 selected_df
 
-st.subheader("통계")
+st.markdown("### 통계")
+st.sidebar.markdown("## 통계🚩")
+#st.subheader("통계")
 
 df = pd.read_csv('note/lunch_menu.csv')
 
