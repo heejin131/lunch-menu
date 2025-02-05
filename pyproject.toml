@@ -1,18 +1,24 @@
 [project]
 name = "lunch-menu"
-version = "0.1.1"
+version = "0.1.0"
 description = "Default template for PDM package"
 authors = [
     {name = "heejin131", email = "journeyjean131@gmail.com"},
 ]
-dependencies = ["pandas>=2.2.3"]
-requires-python = "==3.10.*"
+dependencies = [
+    "python-dotenv>=1.0.1",
+    "matplotlib>=3.10.0",
+    "streamlit>=1.42.0",
+    "psycopg[binary,pool]>=3.2.4",
+    "pandas>=2.2.3",
+]
+requires-python = ">=3.10"
 readme = "README.md"
 license = {text = "MIT"}
 
 
 [tool.pdm]
-distribution = false
+distribution = true
 
 [dependency-groups]
 eda = [
@@ -22,3 +28,6 @@ test = [
     "pytest>=8.3.4",
 ]
 
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
