@@ -3,7 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import psycopg
 import os
+from  dotenv import load_dotenv
 
+load_dotenv()
 DB_CONFIG = {
     "user": os.getenv("DB_USERNAME"),
     "dbname" : os.getenv("DB_NAME"),
