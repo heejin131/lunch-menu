@@ -2,13 +2,14 @@ import streamlit as st
 import pandas as pd 
 import matplotlib.pyplot as plt
 import psycopg
+import os
 
 DB_CONFIG = {
-    "dbname": "sunsindb",
-    "user" : "sunsin",
-    "password" : "mysecretpassword",
-    "host" : "localhost",
-    "port" : "5432"
+    "user": os.getenv("DB_USERNAME"),
+    "dbname" : os.getenv("DB_NAME"),
+    "password" : os.getenv("DB_PASSWORD"),
+    "host" : os.getenv("DB_HOST"),
+    "port" : os.getenv("DB_PORT")
 }
 
 def get_connection():
@@ -39,7 +40,7 @@ if isPress:
           (menu_name, member_name, dt)
 )
         conn.commit()
-        cursor.close()
+        conn.close()
         st.success(f"버튼{isPress}:{menu_name}, {member_name}, {dt}")
     else:
         st.warning(f"모든 값을 입력해주세요!")
@@ -90,18 +91,12 @@ st.subheader("벌크 인서트")
 isPress = st.button("한방에 인서트")
 
 if isPress:
-	df = pd.read_csv('note/lunch_menu.csv')
-	start_index= df.columns.get_loc('2025-01-07')
-	mdf = df.drop(columns=['gmail', 'github', 'domain', 'vercel', 'role'])
-	df_melt = mdf.melt(id_vars=['ename'], var_name='dt', value_name='menu_name')
-        
-	conn = get_connection()
-	cursor = conn.cursor()
-	for i in range(len(df_melt)):
-		cursor.execute("INSERT INTO lunch_menu (menu_name, member_name, dt)(df_melt.iloc[i]['menu'], df_melt.[i]['ename'],df_melt.iloc[i]['dt'])") 
-        
-	conn.commit()
-	cursor.close()
-	st.success(f"DB에 저장되었습니다.")
-else:
-	st.warning(f"DB에 저장 실패!")
+    conn = get_connection()
+    cursor = conn.cursor()
+    for i in range(len(not_na_df)):
+        cursor.execute("INSERT INTO lunch_menu (menu_name, member_name, dt) VALUES (%s, %s, %s)", (not_na_df.iloc[i]['menu_name'], not_na_df.iloc[i]['ename'], not_na_df.iloc[i]['dt']))
+  
+    conn.commit()
+    conn.close()
+    st.success(f"DB에 저장되었습니다.")
+
