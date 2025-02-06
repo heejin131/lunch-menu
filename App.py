@@ -4,11 +4,14 @@ import matplotlib.pyplot as plt
 import psycopg
 import os
 from  dotenv import load_dotenv
+
+members = {"SEO": 6, "TOM": 2, "cho": 3, "hyun": 4, "nuni": 10, "JERRY": 5, "jacob": 8, "jiwon": 7, "lucas": 9, "heejin": 1}
+
 load_dotenv()
 db_name=os.getenv("DB_NAME")
 DB_CONFIG = {
     "user": os.getenv("DB_USERNAME"),
-    "dbname" : os.getenv("DB_NAME"),
+    "dbname" : db_name,
     "password" : os.getenv("DB_PASSWORD"),
     "host" : os.getenv("DB_HOST"),
     "port" : os.getenv("DB_PORT")
@@ -17,13 +20,13 @@ DB_CONFIG = {
 def get_connection():
     return psycopg.connect(**DB_CONFIG)
 
-def insert_menu(menu_name, member_name, dt):
+def insert_menu(menu_name, member_id, dt):
     try:
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO lunch_menu(menu_name, member_name, dt) VALUES (%s, %s, %s);",
-            (menu_name, member_name, dt)
+            (menu_name, member_id, dt)
             )
         conn.commit()
         cursor.close()
@@ -49,15 +52,18 @@ menu_name = st.text_input("매뉴 이름", placeholder="예: 김치볶음밥")
 #member_name = st.text_input("먹은 사람", placeholder="예: 전희진", value = "heejin")
 member_name = st.selectbox(
     "먹은 사람?",
-    ("heejin", "TOM", "cho", "hyun", "JERRY", "SEO", "jiwon", "jacob", "lucas","nuni"),
+    options=list(members.keys()),
+    index =list(members.keys()).index('heejin')    
 )
+member_id = members[member_name]
+
 dt = st.date_input("날짜")
 
 isPress = st.button("메뉴저장")
 
 if isPress:
-    if menu_name and member_name and dt:
-        if insert_menu(menu_name, member_name, dt):
+    if menu_name and member_id and dt:
+        if insert_menu(menu_name, member_id, dt):
             st.success(f"입력성공")
         else:
             st.error(f"입력실패")
@@ -120,7 +126,7 @@ if isPress:
     conn = get_connection()
     cursor = conn.cursor()
     for i in range(len(not_na_df)):
-        cursor.execute("INSERT INTO lunch_menu (menu_name, member_name, dt) VALUES (%s, %s, %s)", (not_na_df.iloc[i]['menu_name'], not_na_df.iloc[i]['ename'], not_na_df.iloc[i]['dt']))
+        cursor.execute("INSERT INTO lunch_menu (menu_name, member_id, dt) VALUES (%s, %s, %s)", (not_na_df.iloc[i]['menu_name'], not_na_df.iloc[i]['ename'], not_na_df.iloc[i]['dt']))
   
     conn.commit()
     conn.close()
