@@ -25,7 +25,7 @@ def insert_menu(menu_name, member_id, dt):
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO lunch_menu(menu_name, member_name, dt) VALUES (%s, %s, %s);",
+           " INSERT INTO lunch_menu(menu_name, member_id, dt) VALUES (%s, %s, %s);",
             (menu_name, member_id, dt)
             )
         conn.commit()
@@ -71,12 +71,16 @@ if isPress:
         st.warning(f"모든 값을 입력해주세요!")
 
 st.subheader("확인")
-query = """SELECT 
-menu_name AS menu, 
-member_name AS ename, 
-dt 
-FROM lunch_menu 
-ORDER BY dt DESC"""
+query = """
+SELECT
+	l.menu_name,
+	m.name,
+	l.dt
+FROM 
+	lunch_menu l  
+	inner join member m
+	on l.member_id = m.id
+"""
 
 conn = get_connection()
 cursor = conn.cursor()
@@ -126,7 +130,11 @@ if isPress:
     conn = get_connection()
     cursor = conn.cursor()
     for i in range(len(not_na_df)):
-        cursor.execute("INSERT INTO lunch_menu (menu_name, member_id, dt) VALUES (%s, %s, %s)", (not_na_df.iloc[i]['menu_name'], not_na_df.iloc[i]['ename'], not_na_df.iloc[i]['dt']))
+        m_id = members[not_na_df.iloc[i]['ename']]
+        cursor.execute("INSERT INTO lunch_menu (menu_name, member_id, dt) VALUES (%s, %s, %s)", 
+                       (not_na_df.iloc[i]['menu_name'], 
+                        m_id, 
+                        not_na_df.iloc[i]['dt']))
   
     conn.commit()
     conn.close()
