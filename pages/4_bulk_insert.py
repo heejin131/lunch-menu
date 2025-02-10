@@ -4,29 +4,7 @@ import matplotlib.pyplot as plt
 import psycopg
 import os
 from  dotenv import load_dotenv
-
-load_dotenv()
-db_name=os.getenv("DB_NAME")
-DB_CONFIG = {
-    "user": os.getenv("DB_USERNAME"),
-    "dbname" : db_name,
-    "password" : os.getenv("DB_PASSWORD"),
-    "host" : os.getenv("DB_HOST"),
-    "port" : os.getenv("DB_PORT")
-}
-
-def get_connection():
-    return psycopg.connect(**DB_CONFIG)
-
-st.subheader("CHART")
-# Matplotlib로 바 차트 그리기
-try:
-    fig, ax = plt.subplots()
-    gdf.plot(x='ename', y='menu_name', kind='bar', ax=ax)
-    st.pyplot(fig)
-except Exception as e:
-    st.warning(f"차트를 그리기에 충분한 데이터가 없습니다.")
-    print(f"Exception:{e}")
+from lunch_menu.db import select_df
 
 # TODO
 # CSV 로드해서 한번에 다 디비에 INSERT 하는거
