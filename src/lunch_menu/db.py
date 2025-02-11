@@ -59,3 +59,17 @@ def insert_menu(menu_name, member_id, dt):
     except Exception as e:
         print(f"Exception:{e}")
         return False
+    
+def rank_menu():
+    conn = get_connection()
+
+    query = """
+            SELECT menu_name, COUNT(*) AS order_count
+            FROM lunch_menu
+            GROUP BY menu_name
+            ORDER BY order_count DESC
+            limit 5;
+            """
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
