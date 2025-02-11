@@ -1,12 +1,12 @@
 import streamlit as st
-import pandas as pd 
 import matplotlib.pyplot as plt
 from lunch_menu.db import select_df
 
-st.markdown("### 통계")
-st.sidebar.markdown("## 통계🚩")
+st.set_page_config(page_title="STATISTICS", page_icon="🍽️")
 
-st.subheader("TABLE")
+st.markdown("# 🍽️ STATISTICS Menu")
+st.sidebar.header("STATISTICS Menu")
+
 selected_df = select_df()
 gdf = selected_df.groupby('ename')['menu_name'].count().reset_index()
 gdf
