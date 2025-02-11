@@ -3,6 +3,9 @@ import psycopg
 import os
 from  dotenv import load_dotenv
 
+members = {"SEO": 5, "TOM": 1, "cho": 2, "hyun": 3, "nuni": 10, "JERRY": 4, "jacob": 7, "jiwon": 6, "lucas": 9, "heejin": 8}
+
+
 load_dotenv()
 db_name=os.getenv("DB_NAME")
 DB_CONFIG = {
