@@ -1,14 +1,15 @@
 import streamlit as st
 import requests
 import lunch_menu.constants as const
+import datetime
 
 st.set_page_config(page_title="API", page_icon="🍽️")
 
 st.markdown("# 🍽️ API")
-st.sidebar.header("API")
+st.sidebar.header("나이계산기")
 
-dt = st.date_input("생일 입력")
-if st.button("메뉴 저장"):
+dt = st.date_input("생일 입력",min_value=datetime.date(1900,1,1))
+if st.button("나이 조회"):
     headers = {
         'accept': 'application/json'
     }
