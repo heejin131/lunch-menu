@@ -36,7 +36,6 @@ def insert_menu(menu_name, member_id, dt):
         print(f"Exception:{e}")
         return False
 st.markdown(f"# 오늘 점심 뭐먹지?{db_name}")
-st.sidebar.markdown("## Main page 🎧")
 
 #st.title(f"오늘 점심 뭐먹지?{db_name}")
 st.write('''
@@ -95,7 +94,6 @@ selected_df = pd.DataFrame(rows, columns=['menu_name', 'ename', 'dt'])
 selected_df
 
 st.markdown("### 통계")
-st.sidebar.markdown("## 통계🚩")
 #st.subheader("통계")
 
 df = pd.read_csv('note/lunch_menu.csv')
